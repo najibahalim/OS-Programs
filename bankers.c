@@ -1,87 +1,102 @@
 #include<stdio.h>
-int available[10];
-int allocated[10][10];
-int max[10][10];
-int need[10][10];
-int pf;
+#include<conio.h>
+#include<math.h>
 void main(){
-	int n,m,index=0,count=0;
-	int i,j,request[10],work[10],ans[10];
-	int flag[10]={0};
-	pf=0;
-	printf("Enter the number of Processes and reosurces ");
-	scanf("%d %d",&n,&m);
-	printf("Enter the available matrix ");
-	for(i=0;i<m;i++)
-	{
-		scanf("%d",&available[i]);
+int avail[10],max[10][10],alloc[10][10],need[10][10],completed[10]={0};
+int p,r,i,j,process,count = 0,result[10]={0};
+clrscr();
+printf("\n\n total no. of process is : ");
+scanf("%d",&p);
+printf("\n\nthe total types of resources : ");
+scanf("%d",&r);
+printf("\n\n enter the allocaton matrix\n");
+for(i=0; i<p;i++){
+	printf("for process %d :  ",(i+1));
+	for(j=0;j<r;j++)
+		scanf("%d",&alloc[i][j]);
+
+}
+printf("\n\n enter the maximum requriments for each process \n");
+
+for(i=0; i<p;i++){
+	printf("for process %d :  ",(i+1));
+	for(j=0;j<r;j++)
+		scanf("%d",&max[i][j]);
+
+}
+	printf("\nenter the available resources\n");
+
+for(i=0;i<r;i++){
+	scanf("%d",&avail[i]);
+}
+/* calculation of need matrix */
+for(i = 0 ; i<p ; i++){
+	for(j = 0; j<r ; j++){
+		need[i][j]= abs(alloc[i][j] - max[i][j]);
 	}
-	printf("Enter the allocated matrix\n");
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<m;j++)
-		{
-			scanf("%d",&allocated[i][j]);
-		}
+}
+	process = -1; printf("\n\n");
+	printf("allocation  \t\t max \t\t need\n");
+
+do{
+ /* print allocation and max matrix
+ for(i=0 ; i< p; i++)
+ {
+	for(j =0;j<r ; j++ ){
+	 printf("%d ",alloc[i][j]);
 	}
-	printf("Enter the max matrix\n");
-	for(i=0;i<n;i++)
-	{
-		for(j=0;j<m;j++)
-		{
-			scanf("%d",&max[i][j]);
-			need[i][j]=max[i][j]-allocated[i][j];
-		}
+	for(j =0;j<r ; j++ ){
+	 printf("%d ",max[i][j]);
+	}
+	for(j =0;j<r ; j++ ){
+	 printf("%d ",need[i][j]);
 	}
 	printf("\n");
-	
-	//Safety Algorithm
-	index=0;
-	for(i=0;i<m;i++)
+ } */
+ process = -1;
+ for(i = 0;i<p;i++)
+ {
+	if(completed[i]==0)
 	{
-		work[i]=available[i];
-	}
-	for(i=0;;i=(i+1)%n)
-	{
-		int x=0;
-		for(j=0;j<m;j++)
-		if(need[i][j]>work[j])
+		process = i;
+		for(j = 0 ; j<r ; j++)
 		{
-			x=1;
-			break;
-		}
-		if(flag[i]!=0)
-		x=1;
-		if(x==0)
-		{
-			for(j=0;j<m;j++)
-				work[j]+=need[i][j];
-			flag[i]=1;
-			ans[index++]=i;
-			count=0;
-		}
-		else count++;
-		x=0;
-		for(j=0;j<n;j++)
-		{
-			if(flag[j]!=1){
-				x=1;
+			if(avail[j] < need[i][j])
+			{
+				process = -1;
 				break;
 			}
 		}
-		if(x==0)
-		break;
-		else if(count>=n)
-		break;
 	}
-	if(count==0)
-	{
-		printf("\nSafety Sequence ");
-		for(i=0;i<n;i++)
-		printf("P%d ",ans[i]);
-	}
-	else
-	{
-		printf("Not in safe state");
-	}
+       if(process !=-1)
+       {
+	break;
+       }
+ } if(process !=-1){
+   result[count] = process + 1;
+   for(i = 0; i<r ; i++){
+	avail[i] += alloc[process][i];
+
+   }
+   completed[process] = 1;
+   count++;
+   }
+
+
+}while(count != p && process!=-1);
+ if(count == p)
+ {
+	printf("the given set of process have safety sequence as follows :\n");
+	for(i=0;i<p;i++)
+	printf("%d -> ", result[i]);
+
+ }
+ else{
+ printf("there is no safety sequence ");
+ }
+
+
+
+
+getch();
 }
