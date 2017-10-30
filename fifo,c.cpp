@@ -26,13 +26,7 @@ int main(){
 		}
 		if(flag==0)
 		{
-			pointer=0;
-			for(k=2;k>=0;k--)
-			{
-				if(used[k]<used[pointer] || cache[k]==-99){
-					pointer=k;
-				}
-			}
+			
 			miss++;
 			cache[pointer]=memory[i];
 			used[pointer]=0;
@@ -40,6 +34,8 @@ int main(){
 			for(h=0;h<3;h++)
 			printf("%d ",cache[h]);
 			printf("MISS\n");
+			pointer++;
+			pointer%=3;
 		}
 	
 	}
