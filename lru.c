@@ -15,7 +15,7 @@ int main(){
 			if(cache[j]==memory[i])
 			{
 				hit++;
-				used[j]++;
+				used[j]=0;
 				printf("Status of Cache::");
 				for(h=0;h<3;h++)
 				printf("%d ",cache[h]);
@@ -23,13 +23,15 @@ int main(){
 				flag=1;
 				break;
 			}
+			else
+			used[j]++;
 		}
 		if(flag==0)
 		{
-			pointer=0;
+			pointer=2;
 			for(k=2;k>=0;k--)
 			{
-				if(used[k]<used[pointer] || cache[k]==-99){
+				if(used[k]>used[pointer] || cache[k]==-99){
 					pointer=k;
 				}
 			}
